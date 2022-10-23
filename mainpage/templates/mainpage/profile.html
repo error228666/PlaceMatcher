@@ -1,5 +1,10 @@
 {% extends 'mainpage/base.html' %}
 
 {% block content%}
-    <h3>Profile!</h3>
+    {% if user.is_authenticated %}
+          <h1>Привет, {{ user.username}}!</h1>
+
+      {% else %}
+          <h1>Вы не вошли в аккаунт.</h1>
+      {% endif %}
 {% endblock %}
