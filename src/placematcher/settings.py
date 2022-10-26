@@ -119,6 +119,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = "search"
 LOGOUT_REDIRECT_URL = "login"
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+LOGIN_URL = 'login'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
