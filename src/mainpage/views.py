@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-from django.shortcuts import render
-from django.http import HttpResponse
-=======
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
@@ -9,7 +5,6 @@ from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 
->>>>>>> Stashed changes
 
 
 def mainpage(request):
@@ -86,14 +81,8 @@ class CustomLoginView(LoginView):
     def form_valid(self, form):
         remember_me = form.cleaned_data.get('remember_me')
 
-<<<<<<< Updated upstream
-
-def login(request):
-    return render(request, "mainpage/login.html")
-=======
         if not remember_me:
             self.request.session.set_expiry(0)
->>>>>>> Stashed changes
 
             # Set session as modified to force data updates/cookie to be saved.
             self.request.session.modified = True
