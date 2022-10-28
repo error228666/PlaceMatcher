@@ -16,8 +16,8 @@ def friends(request):
     return render(request, "mainpage/friends.html")
 
 
-def search(request):
-    return render(request, "mainpage/search.html")
+#def search(request):
+ #   return render(request, "mainpage/search.html")
 
 
 def favorites(request):
