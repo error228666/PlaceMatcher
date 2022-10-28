@@ -1,10 +1,11 @@
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-
+from .models import Profile, FriendRequest
 
 
 def mainpage(request):
@@ -43,6 +44,27 @@ def profile(request):
         profile_form = UpdateProfileForm(instance=request.user.profile)
 
     return render(request, 'mainpage/profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
+@login_required
+def send_friend_request(request, userID):
+    from_user = request.user
+    to_user = Profile.objects.get(id=userID)
+    friend_request, created = FriendRequest.objects.get_or_create(from_user=from_user, to_user=to_user)
+    if created:
+        return HttpResponse('заявка в друзья отправлена')
+    else:
+        return HttpResponse('заявка в друзья уже была отправлена')
+
+@login_required
+def accept_friend_request(request,requestID):
+    friend_request=FriendRequest.objects.get(id=requestID)
+    if friend_request.to_user == request.user:
+        friend_request.to_user.friends.add(friend_request.from_user)
+        friend_request.from_user.friends.add(friend_request.to_user)
+        friend_request.delete()
+        return HttpResponse('заявка в друзья принята')
+    else:
+        return HttpResponse('заявка в друзья отклонена')
 
 
 class SignUp(View):
