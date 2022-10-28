@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("", views.mainpage, name="home"),
-    path("search/", views.search, name="search"),
+    path("search/", include("search.urls")),
     path("profile/", views.profile, name="profile"),
     path("friends/", views.friends, name="friends"),
     path("favorites/", views.favorites, name="favorites"),
@@ -17,3 +17,6 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(redirect_authenticated_user=True, template_name='registration/login.html',
                                            authentication_form=LoginForm), name='login'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT )
