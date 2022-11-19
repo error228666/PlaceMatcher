@@ -191,12 +191,3 @@ class Reviews(models.Model):
     class Meta:
         managed = False
         db_table = 'reviews'
-
-
-class Users(models.Model):
-    name = models.CharField(max_length=45)
-
-    class Meta:
-        managed = False
-        db_table = 'users'
-

@@ -1,13 +1,17 @@
 from django.core.management.base import BaseCommand
-from core.models import Places, Type
-from django.core.exceptions import MultipleObjectsReturned
-from django.db.utils import DataError
+from core.models import Places, Category
 import csv
 
 
 def add_data(row):
-    type = Type.objects.get_or_create(name=row[2])
-    place = Places.objects.get_or_create(name=row[0], type=row[2], adress=row[3], site=row[20], vk=row[24])
+    place = Places(name=row[0], adress=row[3], site=row[20], vk=row[24])
+    place.save()
+    categories = row[2].split(";")
+    for cat in categories:
+        category = Category.objects.get_or_create(name=cat)
+        place.category.add(Category.objects.get(name=cat))
+    place.save()
+
 
 class Command(BaseCommand):
 
@@ -24,9 +28,9 @@ class Command(BaseCommand):
                 if count == 0:
                     count = 1
                 else:
-                    try:
-                        add_data(row)
-                    except (MultipleObjectsReturned, DataError):
-                        pass
+                    if count > 15:
+                        break
+                    count+=1
+                    add_data(row)
 
         self.stdout.write(self.style.SUCCESS('Data imported successfully'))
