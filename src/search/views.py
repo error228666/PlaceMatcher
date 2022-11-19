@@ -13,7 +13,7 @@ def SearchView(request):
     min_rating = request.GET.get('min_rating')
     category = request.GET.get('category')
     show_results = 0
-    
+
     if (is_valid_queryparam(name_contains) or is_valid_queryparam(person_count)
         or is_valid_queryparam(min_rating) or is_valid_queryparam(category) ):
         show_results = 1
