@@ -24,8 +24,9 @@ class Profile(models.Model):
             img.save(self.avatar.path)
 
 class FriendRequest(models.Model):
-    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
-    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
+    from_user = models.ForeignKey(Profile, related_name="from_user", on_delete=models.CASCADE)
+    to_user = models.ForeignKey(Profile, related_name="to_user", on_delete=models.CASCADE)
+
 
 
 class AuthGroup(models.Model):
