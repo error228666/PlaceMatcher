@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from PIL import Image
+from core.models import Places, Category
 
 
 class Profile(models.Model):
@@ -23,9 +24,28 @@ class Profile(models.Model):
             img.thumbnail(new_img)
             img.save(self.avatar.path)
 
+
 class FriendRequest(models.Model):
     from_user = models.ForeignKey(Profile, related_name="from_user", on_delete=models.CASCADE)
     to_user = models.ForeignKey(Profile, related_name="to_user", on_delete=models.CASCADE)
+
+"""
+class Meeting(models.Model):
+    place = models.ManyToManyField(Places, on_delete=models.CASCADE, default='')
+    user1 = models.ForeignKey(Profile, related_name="user1", on_delete=models.CASCADE)
+    user2 = models.ForeignKey(Profile, related_name="user2", on_delete=models.CASCADE)
+
+    date = models.DateField(default='')
+    time = models.TimeField(default='')
+
+    def __str__(self):
+        return f"Встреча с {to_user} запланирована "
+
+    
+class MeetingRequest(models.Model):
+    from_user = models.ForeignKey(Profile, related_name="from_user", on_delete=models.CASCADE)
+    to_user = models.ForeignKey(Profile, related_name="to_user", on_delete=models.CASCADE)
+"""
 
 
 
@@ -164,23 +184,6 @@ class Meetings(models.Model):
         db_table = 'meetings'
 
 
-# class Places(models.Model):
-#     name = models.CharField(max_length=100, blank=True, null=True)
-#     type = models.CharField(max_length=270, blank=True, null=True)
-#     adress = models.CharField(max_length=180, blank=True, null=True)
-#     site = models.CharField(max_length=270, blank=True, null=True)
-#     vk = models.CharField(max_length=45, blank=True, null=True)
-#     average_rating = models.FloatField(blank=True, null=True)
-#     min_count_of_people = models.IntegerField(blank=True, null=True)
-#     max_count_of_people = models.IntegerField(blank=True, null=True)
-#     price = models.FloatField(blank=True, null=True)
-#     other_info = models.CharField(max_length=45, blank=True, null=True)
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'places'
-
-
 class Reviews(models.Model):
     place_id = models.AutoField(primary_key=True)
     text = models.CharField(max_length=100, blank=True, null=True)
@@ -191,3 +194,11 @@ class Reviews(models.Model):
     class Meta:
         managed = False
         db_table = 'reviews'
+
+
+class Users(models.Model):
+    name = models.CharField(max_length=45)
+
+    class Meta:
+        managed = False
+        db_table = 'users'

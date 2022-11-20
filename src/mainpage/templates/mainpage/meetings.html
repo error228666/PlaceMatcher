@@ -1,5 +1,7 @@
 {% extends 'mainpage/base.html' %}
 
 {% block content%}
-    <h3>Meetings!</h3>
+<a href="{% url 'meetings' %}" class="btn btn-outline-primary me-2">Назначить встречу </a>
+<br><br><br>
+<a href="{% url 'meetings' %}" class="btn btn-outline-primary me-2">Запланированные встречи </a>
 {% endblock %}

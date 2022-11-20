@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Category(models.Model):
     name = models.CharField(max_length=30)
 
@@ -14,7 +15,7 @@ class Metro(models.Model):
 
     def __str__(self):
         return self.name
-
+        
 class Places(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     metro = models.ManyToManyField(Metro)
