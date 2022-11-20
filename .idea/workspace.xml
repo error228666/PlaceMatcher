@@ -104,8 +104,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Django Server.PlaceMatcher" />
       <item itemvalue="Python.test" />
+      <item itemvalue="Django Server.PlaceMatcher" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -124,7 +124,7 @@
       <workItem from="1666955799948" duration="12415000" />
       <workItem from="1668842520041" duration="21011000" />
       <workItem from="1668964839376" duration="3839000" />
-      <workItem from="1668968832524" duration="10207000" />
+      <workItem from="1668968832524" duration="10522000" />
     </task>
     <servers />
   </component>
