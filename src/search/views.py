@@ -32,3 +32,10 @@ def SearchView(request):
         'show' :show_results
     }
     return render(request, "mainpage/search.html", context)
+
+
+def PlaceView(request, placeid):
+    context = {
+        'place': Places.objects.get(id=placeid)
+    }
+    return render(request, "mainpage/place.html", context)

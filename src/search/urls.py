@@ -3,9 +3,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView
-from .views import SearchView
+from .views import SearchView, PlaceView
 
 urlpatterns = [
-    path('', SearchView, name="search")
+    path('', SearchView, name="search"),
+    path('<int:placeid>', PlaceView, name="place")
+
     ]
 
