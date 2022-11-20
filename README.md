@@ -25,7 +25,8 @@
 - Make buttons on meeting tab work: create Meeting, MeetingRequest models and add needed views and forms.
 
 ***
-Authors:
+
+## Authors:
 - Valeria Rubanova: profile, login, logout, signup forms, friends, top navigation bar.
 - Ivan Eroshkin: search, top navigation bar.
 
