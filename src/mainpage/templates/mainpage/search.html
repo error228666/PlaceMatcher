@@ -43,8 +43,7 @@
             <ul>
                 {% for place in queryset %}
                 <li>
-                    {{place.title}}
-                    <span>{{place.name}}</span>
+                     <a href="{% url 'place' place.id %}" >{{place.name}}</a>
 
                     <span>
                 {% for cat in place.category.all %}
