@@ -61,3 +61,13 @@ class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar', 'bio']
+
+
+"""
+class MeetingForm(forms.ModelForm):
+    friends =
+
+    class Meta:
+        model = Meeting
+        fields = ['', 'bio']
+"""

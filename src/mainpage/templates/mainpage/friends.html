@@ -9,7 +9,7 @@
         {% for r in fr  %}
         <div class="box">
             <img src="{{r.from_user.avatar.url}}">
-            <div class="product-list">
+            <div>
                 <h5>{{r.from_user.user}}</h5>
                 <h6>О себе: </h6>
                 {% if r.from_user.bio != '' %}
@@ -30,7 +30,7 @@
         {% for friend in user_friends %}
         <div class="box">
             <img src="{{friend.avatar.url}}">
-            <div class="product-list">
+            <div>
                 <h5>{{friend}}</h5>
                 <h6>О себе: </h6>
                 {% if friend.bio != '' %}
@@ -50,7 +50,7 @@
         {% for user in all_users %}
         <div class="small-box">
             <img src="{{user.avatar.url}}">
-            <div class="product-list">
+            <div>
                 <h5>{{user}}</h5>
                 {% if user.bio != '' %}
                     <p>{{user.bio}}</p>

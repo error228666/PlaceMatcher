@@ -86,14 +86,21 @@
    }
 
    .boxes {display:flex;flex-wrap:wrap;}
-   .box {width:15%;
+   .box {
+       border-radius: 5% 5%;
+       width:15%;
        outline: 1px solid #f0f0f0;
+       outline-width: medium;
+       background-color: #32383F;
        padding: 20px;
        margin-right: 10px;
        margin-bottom: 10px;}
-   .small-box{
+   .small-box {
+       border-radius: 5% 5%;
        width:10%;
        outline: 1px solid #f0f0f0;
+       outline-width: medium;
+       background-color: #32383F;
        padding: 20px;
        margin-right: 10px;
        margin-bottom: 10px;
@@ -110,6 +117,7 @@
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="mb-auto">
     <div>
+      <img class="float-md-start mb-0" src="https://i.ibb.co/mDS6LSH/logo.png" alt="logo" width="29px" height="29px">
       <h3 class="float-md-start mb-0">Placematcher</h3>
       <nav class="nav nav-masthead justify-content-center float-md-end">
         <a class="nav-link fw-bold py-1 px-10 active" aria-current="page" href="{% url 'search' %}">Поиск</a>
