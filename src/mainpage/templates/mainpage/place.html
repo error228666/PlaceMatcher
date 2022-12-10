@@ -1,0 +1,19 @@
+{% extends 'mainpage/base.html' %}
+
+{% block content%}
+
+<br>{{place.name}}<br>
+<hr/>
+{% for cat in place.category.all %}
+                        {{cat}}
+{% endfor %}
+<hr/>
+{{place.adress}}
+<hr/>
+{{place.vk}}
+<hr/>
+{{place.site}}
+
+
+
+{% endblock %}

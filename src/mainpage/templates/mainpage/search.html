@@ -2,4 +2,61 @@
 
 {% block content%}
     <h3>Search!</h3>
+    <form method="GET" action=".">
+        <div class="form-row">
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search" name="name_contains" placeholder="Название" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col-auto">
+            <label for="MinRating">Минимальный рейтинг</label>
+            <input type="number" min=0 class="form-control" id="MinRating" placeholder="0" name="min_rating">
+          </div>
+          <div class="col-auto">
+              <label for="PersonCount">Количество человек</label>
+            <input type="number" min=0 class="form-control" id="PersonCount" placeholder="0" name="person_count">
+          </div>
+
+
+        </div>
+        <div class="form-row">
+              <label for="category">Категория</label>
+            <select id="category" class="form-control" name="category">
+              <option selected>Choose...</option>
+              {% for cat in categories %}
+              <option value="{{ cat }}">{{ cat }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <hr />
+
+
+        <div class="row">
+            <ul>
+                {% for place in queryset %}
+                <li>
+                     <a href="{% url 'place' place.id %}" >{{place.name}}</a>
+
+                    <span>
+                {% for cat in place.category.all %}
+                        {{cat}},
+                        {% endfor %},
+                    </span>
+                    <span>Адрес: {{place.adress}}, </span>
+                    <span>Рейтинг: {{place.average_rating}}, </span>
+                    <span>Количество человек: {{place.min_count_of_people}}-{{place.max_count_of_people}}</span>
+
+                </li>
+                <hr/>
+                {% endfor %}
+            </ul>
+        </div>
 {% endblock %}

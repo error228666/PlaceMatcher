@@ -1,10 +1,12 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 
+from .models import Profile, FriendRequest
 
 
 def mainpage(request):
@@ -12,11 +14,17 @@ def mainpage(request):
 
 
 def friends(request):
-    return render(request, "mainpage/friends.html")
+    user = Profile.objects.get(id=request.user.id)
+    all_users = Profile.objects.exclude(id=request.user.id)
+    fr = FriendRequest.objects.filter(to_user=user)
+    user_friends = user.friends.all()
+    for u in all_users:
+        if u in user_friends:
+            all_users = all_users.exclude(id=u.id)
+        if FriendRequest.objects.filter(from_user=user, to_user=u):
+            all_users = all_users.exclude(id=u.id)
+    return render(request, "mainpage/friends.html", {'all_users': all_users, 'fr': fr, 'user_friends': user_friends})
 
-
-def search(request):
-    return render(request, "mainpage/search.html")
 
 
 def favorites(request):
@@ -43,6 +51,40 @@ def profile(request):
         profile_form = UpdateProfileForm(instance=request.user.profile)
 
     return render(request, 'mainpage/profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
+
+def send_request(request,id):
+    from_user = Profile.objects.get(id=request.user.id)
+    to_user = Profile.objects.get(id=id)
+    frequest = FriendRequest.objects.get_or_create(from_user=from_user, to_user=to_user)
+    return redirect('/friends/')
+
+
+def accept_request(request, id):
+    frequest = FriendRequest.objects.get(id=id)
+    user1 = frequest.to_user
+    user2 = frequest.from_user
+    user1.friends.add(user2)
+    user2.friends.add(user1)
+    FriendRequest.objects.filter(id=id).delete()
+    return redirect('/friends/')
+
+
+def reject_request(request, id):
+    FriendRequest.objects.filter(id=id).delete()
+    return redirect('/friends/')
+
+
+def delete_friend(request, id):
+    user = Profile.objects.get(id=request.user.id)
+    friend = Profile.objects.get(id=id)
+    user.friends.remove(friend)
+    friend.friends.remove(user)
+    print('\n\n\n\n')
+    print(user.friends.all())
+    print(friend.friends.all())
+    print('\n\n\n\n')
+    return redirect('/friends/')
 
 
 class SignUp(View):

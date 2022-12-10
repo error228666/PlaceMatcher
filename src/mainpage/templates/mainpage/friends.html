@@ -1,5 +1,70 @@
 {% extends 'mainpage/base.html' %}
 
 {% block content%}
-    <h3>Friends!</h3>
+    {% if user.is_authenticated %}
+    <h1>
+        {% if fr %}
+        <h2>Заявки в друзья</h2>
+        <div class="boxes">
+        {% for r in fr  %}
+        <div class="box">
+            <img src="{{r.from_user.avatar.url}}">
+            <div>
+                <h5>{{r.from_user.user}}</h5>
+                <h6>О себе: </h6>
+                {% if r.from_user.bio != '' %}
+                    <p>{{r.from_user.bio}}</p>
+                {% else %}
+                    <p> Нет информации о пользователе. </p>
+                {% endif %}
+                <a href="{% url 'accept' r.id %}" class="btn btn-outline-primary me-2">Принять заявку</a>
+                <a href="{% url 'reject' r.id %}" class="btn btn-outline-primary me-2">Отклонить заявку</a>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+        {% if user_friends %}
+        <h2>Друзья</h2>
+        <div class="boxes">
+        {% for friend in user_friends %}
+        <div class="box">
+            <img src="{{friend.avatar.url}}">
+            <div>
+                <h5>{{friend}}</h5>
+                <h6>О себе: </h6>
+                {% if friend.bio != '' %}
+                    <p>{{friend.bio}}</p>
+                {% else %}
+                    <p> Нет информации о пользователе. </p>
+                {% endif %}
+                <a href="{% url 'delete-friend' friend.id %}" class="btn btn-outline-primary me-2">Удалить из друзей</a>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+        {% if all_users %}
+        <h2>Другие пользователи</h2>
+        <div class="boxes">
+        {% for user in all_users %}
+        <div class="small-box">
+            <img src="{{user.avatar.url}}">
+            <div>
+                <h5>{{user}}</h5>
+                {% if user.bio != '' %}
+                    <p>{{user.bio}}</p>
+                {% else %}
+                    <p> Нет информации о пользователе. </p>
+                {% endif %}
+                <a href="{% url 'add-friend' user.id %}" class="btn btn-outline-primary me-2">Добавить в друзья</a>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+        {% else %}
+        <h2>Войдите, чтобы просмотреть друзей. </h2>
+        {% endif %}
+    </h1>
 {% endblock %}
