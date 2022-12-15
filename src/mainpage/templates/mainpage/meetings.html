@@ -1,7 +1,33 @@
 {% extends 'mainpage/base.html' %}
 
 {% block content%}
-<a href="{% url 'meetings' %}" class="btn btn-outline-primary me-2">Назначить встречу </a>
+{% if sent_requests %}
+<p> Пользователь(и) </p>
+{% for r in sent_requests %}
+<p>{{ r.to_user_mr }}</p>
+{% endfor %}
+<p>еще не ответил(и) на Ваши предложения о встрече.</p>
+{% endif %}
+<a href="{% url 'schedule-meeting' %}" class="btn btn-outline-primary me-2">Назначить встречу </a>
 <br><br><br>
-<a href="{% url 'meetings' %}" class="btn btn-outline-primary me-2">Запланированные встречи </a>
+
+<a href="{% url 'planned-meetings' %}" class="btn btn-outline-primary me-2">Запланированные встречи </a>
+{% if new_requests %}
+<div class="card-header justify-content-center">
+    <h3 class="font-weight- my-4 text-center-dark">Предложения о встречах: </h3>
+</div>
+<div class="boxes">
+{% for r in new_requests %}
+<div class="box">
+            <div>
+                <h5>C кем: {{ r.from_user_mr }}</h5>
+                <h6>Место: {{ r.place }}</h6>
+                <h6>Время: {{ r.date }} {{ r.time }}</h6>
+                <a href="{% url 'accept-meeting-request' r.id %}" class="btn btn-outline-primary me-2">Согласиться</a>
+                <a href="{% url 'reject-meeting-request' r.id %}" class="btn btn-outline-primary me-2">Отказаться</a>
+            </div>
+</div>
+{% endfor %}
+</div>
+{% endif %}
 {% endblock %}

@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import Profile
+from .models import Profile, MeetingRequest, Meeting
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+
+from core.models import Places
 
 
 class ProfileInline(admin.StackedInline):  # StackedInline normally is used for formsets
@@ -26,4 +28,5 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(Profile)
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
-#admin.site.register(Places)
+admin.site.register(MeetingRequest)
+admin.site.register(Meeting)

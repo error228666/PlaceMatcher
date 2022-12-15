@@ -1,0 +1,27 @@
+{% extends 'mainpage/base.html' %}
+
+{% block content%}
+<div class="row justify-content-center">
+<div class="col-lg-5">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body" align="center">
+<div class="list-group w-auto">
+    {% for meet in meetings %}
+    <div class="d-flex gap-2 w-300 justify-content-between">
+      <div>
+        <h6 class="mb-0">Встреча {{ meet.from_user_m }} с {{ meet.to_user_m }}</h6>
+        <p class="mb-0 opacity-75">Время: {{meet.date_m }} {{ meet.time_m }}</p>
+        <p class="mb-0 opacity-75">Место: {{ meet.place_m }}</p>
+      </div>
+      <a href="{% url 'cancel-meeting' meet.id %}" class="btn btn-outline-primary me-2">Отменить встречу</a>
+    </div>
+  <br>
+    {% endfor %}
+</div>
+  <br><br>
+  <a href="{% url 'meetings' %}" class="btn btn-outline-primary me-2">Назад</a>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

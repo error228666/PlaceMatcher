@@ -8,6 +8,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Metro(models.Model):
     name = models.CharField(max_length=30,blank=True, null=True)
     line = models.IntegerField(blank=True, null=True)
@@ -16,13 +17,8 @@ class Metro(models.Model):
 
     def __str__(self):
         return self.name
-<<<<<<< Updated upstream
-        
-=======
 
 
-
->>>>>>> Stashed changes
 class Places(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     metro = models.ManyToManyField(Metro)

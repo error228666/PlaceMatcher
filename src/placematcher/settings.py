@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "mainpage",
     "core",
-    "search"
+    "search",
+    "django_flatpickr",
 ]
 
 MIDDLEWARE = [
