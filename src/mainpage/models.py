@@ -29,23 +29,24 @@ class FriendRequest(models.Model):
     from_user = models.ForeignKey(Profile, related_name="from_user", on_delete=models.CASCADE)
     to_user = models.ForeignKey(Profile, related_name="to_user", on_delete=models.CASCADE)
 
-"""
-class Meeting(models.Model):
-    place = models.ManyToManyField(Places, on_delete=models.CASCADE, default='')
-    user1 = models.ForeignKey(Profile, related_name="user1", on_delete=models.CASCADE)
-    user2 = models.ForeignKey(Profile, related_name="user2", on_delete=models.CASCADE)
 
-    date = models.DateField(default='')
-    time = models.TimeField(default='')
+class Meeting(models.Model):
+    from_user_m = models.ForeignKey(Profile, related_name="from_user_m", on_delete=models.CASCADE)
+    to_user_m = models.ForeignKey(Profile, related_name="to_user_m", on_delete=models.CASCADE)
+    place_m = models.ForeignKey(Places, related_name="place_m", on_delete=models.CASCADE)
+    date_m = models.DateField(default='')
+    time_m = models.TimeField(default='', max_length=10)
 
     def __str__(self):
-        return f"Встреча с {to_user} запланирована "
+        return f"Время: {self.date_m} {self.time_m }\n Место:{self.place_m}"
 
-    
+
 class MeetingRequest(models.Model):
-    from_user = models.ForeignKey(Profile, related_name="from_user", on_delete=models.CASCADE)
-    to_user = models.ForeignKey(Profile, related_name="to_user", on_delete=models.CASCADE)
-"""
+    from_user_mr = models.ForeignKey(Profile, related_name="from_user_mr", on_delete=models.CASCADE)
+    to_user_mr = models.ForeignKey(Profile, related_name="to_user_mr", on_delete=models.CASCADE)
+    place = models.ForeignKey(Places, related_name="places", on_delete=models.CASCADE)
+    date = models.DateField(default='')
+    time = models.TimeField(default='', max_length=10)
 
 
 

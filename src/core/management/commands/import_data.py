@@ -1,9 +1,6 @@
 from django.core.management.base import BaseCommand
-from core.models import Places, Category, Metro
+from core.models import Places, Category
 import csv
-import geopy
-import geopy.distance
-from geopy.geocoders import Nominatim
 import math
 
 
@@ -21,7 +18,7 @@ def add_place(row):
 
 
 
-def find_nearest_metro(place):
+"""def find_nearest_metro(place):
     adress = "Санкт-Петербург, " + place.adress
     print(adress)
     geopy.geocoders.options.default_user_agent = "myapp"
@@ -40,7 +37,7 @@ def find_nearest_metro(place):
             if (min > geopy.distance.geodesic((width, metro.width), (longitude, metro.longitude))):
                 min = geopy.distance.geodesic((width, metro.width), (longitude, metro.longitude))
                 res = metro.name
-    return res
+    return res"""
 
 
 
@@ -49,13 +46,13 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('file_places', type=str)
-        parser.add_argument('file_metro', type=str)
+        #parser.add_argument('file_metro', type=str)
 
     def handle(self, *args, **kwargs):
         file_places = kwargs['file_places']
-        file_metro = kwargs['file_metro']
+        #file_metro = kwargs['file_metro']
 
-        with open(f'{file_metro}.csv', encoding='utf-8') as r_file:
+        """with open(f'{file_metro}.csv', encoding='utf-8') as r_file:
             file_reader = csv.reader(r_file, delimiter=",")
             count = 0
             for row in file_reader:
@@ -63,7 +60,7 @@ class Command(BaseCommand):
                     count = 1
                 else:
                     metro = Metro(line=row[0], name=row[1], width=row[2], longitude=row[3])
-                    metro.save()
+                    metro.save()"""
 
         with open(f'{file_places}.csv', encoding='utf-8') as r_file:
             file_reader = csv.reader(r_file, delimiter=",")

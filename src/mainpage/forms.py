@@ -2,7 +2,14 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms import ImageField
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, MeetingRequest
+from core.models import Places
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+class TimeInput(forms.TimeInput):
+    input_type = 'time'
 
 
 class RegisterForm(UserCreationForm):
@@ -63,11 +70,16 @@ class UpdateProfileForm(forms.ModelForm):
         fields = ['avatar', 'bio']
 
 
-"""
-class MeetingForm(forms.ModelForm):
-    friends =
+class MeetingRequestForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        uid = kwargs.pop('uid', None)
+        super(MeetingRequestForm, self).__init__(*args, **kwargs)
+        self.fields['to_user_mr'].queryset = Profile.objects.exclude(id=uid)
+
+    date = forms.DateField(widget=DateInput())
+    time = forms.TimeField(widget=TimeInput())
+    place = forms.ModelChoiceField(queryset=Places.objects.all(), empty_label=None)
 
     class Meta:
-        model = Meeting
-        fields = ['', 'bio']
-"""
+        model = MeetingRequest
+        fields = ['to_user_mr', 'time', 'date', 'place']
