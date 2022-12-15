@@ -1,4 +1,5 @@
 from django.db import models
+from mainpage.models import Profile
 
 
 class Category(models.Model):
@@ -29,8 +30,13 @@ class Places(models.Model):
     min_count_of_people = models.IntegerField(blank=True, null=True,default=0)
     max_count_of_people = models.IntegerField(blank=True, null=True,default=0)
     price = models.FloatField(blank=True, null=True)
-    other_info = models.CharField(max_length=45, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
+class Review(models.Model):
+    place = models.OneToOneField(Places, models.DO_NOTHING,null=True)
+    text = models.TextField()
+    user = models.OneToOneField(Profile, models.DO_NOTHING)
+    rating = models.FloatField()
+    date = models.DateField(blank=True, null=True)

@@ -12,30 +12,39 @@ def add_place(row):
         category = Category.objects.get_or_create(name=cat)
         place.category.add(Category.objects.get(name=cat))
     place.save()
-    #metro = find_nearest_metro(place)
-    #place.metro.add(Metro.objects.get(name=metro))
+    metro = find_nearest_metro(place)
+    place.metro.add(Metro.objects.get(name=metro))
+
+def convert_coordinates(coord):
+    degree = math.floor(coord)
+    minutes = math.floor((coord - degree) * 100)
+    seconds = ((coord-degree)*100 - minutes) * 100
+    res = degree + minutes / 60 + seconds / 3600
+    return res
 
 
-
-
-"""def find_nearest_metro(place):
-    adress = "Санкт-Петербург, " + place.adress
-    print(adress)
+def find_nearest_metro(place):
+    address = "Санкт-Петербург, " + place.adress
+    index = address.find(" лит ")
+    if index != -1:
+        address = address[:index]
+    print(address)
     geopy.geocoders.options.default_user_agent = "myapp"
     geolocator = Nominatim()
-    location = geolocator.geocode(adress)
+    location = geolocator.geocode(address)
     width = location.latitude
-    longitude = location.latitude
+    longitude = location.longitude
+    print((width, longitude))
     metros = Metro.objects.all()
     min = 0
 
     for metro in metros:
         if min == 0:
-            min = geopy.distance.geodesic((width, metro.width), (longitude, metro.longitude))
+            min = geopy.distance.geodesic((metro.width, metro.longitude), (width, longitude))
             res = metro.name
         else:
-            if (min > geopy.distance.geodesic((width, metro.width), (longitude, metro.longitude))):
-                min = geopy.distance.geodesic((width, metro.width), (longitude, metro.longitude))
+            if (min > geopy.distance.geodesic((metro.width, metro.longitude), (width, longitude))):
+                min = geopy.distance.geodesic((metro.width, metro.longitude), (width, longitude))
                 res = metro.name
     return res"""
 
@@ -59,8 +68,10 @@ class Command(BaseCommand):
                 if count == 0:
                     count = 1
                 else:
-                    metro = Metro(line=row[0], name=row[1], width=row[2], longitude=row[3])
-                    metro.save()"""
+                    w = convert_coordinates(float(row[2]))
+                    l = convert_coordinates(float(row[3]))
+                    metro = Metro(line=row[0], name=row[1], width=w, longitude=l)
+                    metro.save()
 
         with open(f'{file_places}.csv', encoding='utf-8') as r_file:
             file_reader = csv.reader(r_file, delimiter=",")
