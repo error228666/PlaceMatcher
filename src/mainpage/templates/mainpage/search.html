@@ -31,6 +31,15 @@
               <option value="{{ cat }}">{{ cat }}</option>
               {% endfor %}
             </select>
+        </div>
+        <div class="form-row">
+              <label for="category">Ближайшее метро</label>
+            <select id="metro" class="form-control" name="metro">
+              <option selected>Choose...</option>
+              {% for m in metro %}
+              <option value="{{ m }}">{{ m }}</option>
+              {% endfor %}
+            </select>
           </div>
 
         <button type="submit" class="btn btn-primary">Search</button>
@@ -48,12 +57,20 @@
                     <span>
                 {% for cat in place.category.all %}
                         {{cat}},
-                        {% endfor %},
+                        {% endfor %}
                     </span>
-                    <span>Адрес: {{place.adress}}, </span>
-                    <span>Рейтинг: {{place.average_rating}}, </span>
-                    <span>Количество человек: {{place.min_count_of_people}}-{{place.max_count_of_people}}</span>
+                    <span>{% for m in place.metro.all %}
+                        метро {{m}}
+                        {% endfor %} </span>
+                    <script>
+                        /*
+                        <span>Адрес: {{place.adress}}, </span>
+                        <span>Рейтинг: {{place.average_rating}}, </span>
+                        <span>Количество человек: {{place.min_count_of_people}}-{{place.max_count_of_people}}</span>
 
+                         */
+
+                    </script>
                 </li>
                 <hr/>
                 {% endfor %}
