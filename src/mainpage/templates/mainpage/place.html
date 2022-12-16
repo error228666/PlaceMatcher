@@ -8,8 +8,8 @@
 <div class="card-body" align="center">
 
     <div class="form-content">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+        <form>
+
             <div class="form-row">
                 <div class="col-md-8">
                     <div class="form-group">
@@ -34,13 +34,11 @@
                         {% endif %}
                         <hr/>
                         <a href="{{request.META.HTTP_REFERER}}" class="btn btn-dark btn-lg">Назад</a>
-                        <a href="{% url 'review' place.id %}" class="btn btn-dark btn-lg">Оставить отзыв</a>
-                        <hr/>
-                        {% for r in place.review.all %}
-                                {{r.user.user.username}}
-                                {{r.user.id}}
+                        {% if login %}
+                        <a href="{% url 'review' place.id %}" class="btn btn-dark btn-lg" >Оставить отзыв</a>
+                        <a href="{% url 'favadd' place.id %}" class="btn btn-dark btn-lg" >{{text}}</a>
+                        {% endif %}
 
-                            {% endfor %}
                     </div>
                 </div>
             </div>
@@ -52,25 +50,31 @@
 </div>
 </div>
 </div>
-<script>
-  /*
-   <br>{{place.name}}<br>
-<hr/>
 
-{% for cat in place.category.all %}
-    {{cat}}
-{% endfor %}
-<hr/>
-{% for m in place.metro.all %}
-    метро {{m}}
-{% endfor %}
-<hr/>
-{{place.adress}}
-<hr/>
-{{place.vk}}
-<hr/>
-{{place.site}}
-*/
-</script>
+    {% if review %}
+        <div class="row justify-content-center">
+        <div class="col-lg-6">
+        <div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+        <div class="card-body" align="center">
+            <h3>Отзывы</h3>
+            {% for r in review%}
+
+                <h6>Оценка: {{r.rating}}/5</h6>
+                {% if r.text %}
+
+                {{r.text}}
+                {% endif %}
+                <hr>
+            {% endfor %}
+        </div>
+        </div>
+        </div>
+        </div>
+    {% endif%}
+
+
+
+
+
 
 {% endblock %}

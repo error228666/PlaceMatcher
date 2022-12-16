@@ -1,0 +1,20 @@
+{% extends 'mainpage/base.html' %}
+
+{% block content%}
+
+<div class="row justify-content-center">
+<div class="col-lg-6">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body" align="center">
+    <h3>{{text}}</h3>
+    <a href="{% url 'place' place.id %}" class="btn btn-dark btn-lg">На страницу места</a>
+    {% if button %}
+    <a href="{% url 'review' place.id %}" class="btn btn-dark btn-lg">Вернуться к отзыву</a>
+    {% endif %}
+
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

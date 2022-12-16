@@ -26,17 +26,21 @@ class Places(models.Model):
     adress = models.CharField(max_length=180, blank=True, null=True)
     site = models.CharField(max_length=270, blank=True, null=True)
     vk = models.CharField(max_length=45, blank=True, null=True)
-    average_rating = models.FloatField(blank=True, null=True, default=0)
-    min_count_of_people = models.IntegerField(blank=True, null=True,default=0)
-    max_count_of_people = models.IntegerField(blank=True, null=True,default=0)
+    average_rating = models.FloatField(blank=True, null=True)
+    min_count_of_people = models.IntegerField(blank=True, null=True)
+    max_count_of_people = models.IntegerField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
+    favourites = models.ManyToManyField(Profile)
 
     def __str__(self):
         return self.name
 
 class Review(models.Model):
-    place = models.OneToOneField(Places, models.DO_NOTHING,null=True)
+    place = models.ManyToManyField(Places)
+    min = models.IntegerField(blank=True, null=True)
+    max = models.IntegerField(blank=True, null=True)
     text = models.TextField()
-    user = models.OneToOneField(Profile, models.DO_NOTHING)
-    rating = models.FloatField()
+    user = models.ManyToManyField(Profile)
+    rating = models.FloatField(null=True)
     date = models.DateField(blank=True, null=True)
+    price = models.IntegerField(blank=True, null=True)
