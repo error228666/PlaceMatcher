@@ -1,5 +1,4 @@
 from django.db import models
-from mainpage.models import Profile
 
 
 class Category(models.Model):
@@ -10,7 +9,7 @@ class Category(models.Model):
 
 
 class Metro(models.Model):
-    name = models.CharField(max_length=30,blank=True, null=True)
+    name = models.CharField(max_length=30, blank=True, null=True)
     line = models.IntegerField(blank=True, null=True)
     width = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
@@ -34,9 +33,10 @@ class Places(models.Model):
     def __str__(self):
         return self.name
 
+
 class Review(models.Model):
-    place = models.OneToOneField(Places, models.DO_NOTHING,null=True)
+    place = models.OneToOneField(Places, models.DO_NOTHING, null=True)
     text = models.TextField()
-    user = models.OneToOneField(Profile, models.DO_NOTHING)
+    user = models.OneToOneField("mainpage.Profile", models.DO_NOTHING)
     rating = models.FloatField()
     date = models.DateField(blank=True, null=True)

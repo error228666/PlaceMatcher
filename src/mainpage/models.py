@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from PIL import Image
-from core.models import Places, Category
+import core.models
 
 
 class Profile(models.Model):
@@ -33,7 +33,7 @@ class FriendRequest(models.Model):
 class Meeting(models.Model):
     from_user_m = models.ForeignKey(Profile, related_name="from_user_m", on_delete=models.CASCADE)
     to_user_m = models.ForeignKey(Profile, related_name="to_user_m", on_delete=models.CASCADE)
-    place_m = models.ForeignKey(Places, related_name="place_m", on_delete=models.CASCADE)
+    place_m = models.ForeignKey(core.models.Places, related_name="place_m", on_delete=models.CASCADE)
     date_m = models.DateField(default='')
     time_m = models.TimeField(default='', max_length=10)
 
@@ -44,7 +44,7 @@ class Meeting(models.Model):
 class MeetingRequest(models.Model):
     from_user_mr = models.ForeignKey(Profile, related_name="from_user_mr", on_delete=models.CASCADE)
     to_user_mr = models.ForeignKey(Profile, related_name="to_user_mr", on_delete=models.CASCADE)
-    place = models.ForeignKey(Places, related_name="places", on_delete=models.CASCADE)
+    place = models.ForeignKey(core.models.Places, related_name="places", on_delete=models.CASCADE)
     date = models.DateField(default='')
     time = models.TimeField(default='', max_length=10)
 
@@ -185,27 +185,6 @@ class Meetings(models.Model):
         db_table = 'meetings'
 
 
-<<<<<<< Updated upstream
-=======
-# class Places(models.Model):
-#     name = models.CharField(max_length=100, blank=True, null=True)
-#     type = models.CharField(max_length=270, blank=True, null=True)
-#     adress = models.CharField(max_length=180, blank=True, null=True)
-#     site = models.CharField(max_length=270, blank=True, null=True)
-#     vk = models.CharField(max_length=45, blank=True, null=True)
-#     average_rating = models.FloatField(blank=True, null=True)
-#     min_count_of_people = models.IntegerField(blank=True, null=True)
-#     max_count_of_people = models.IntegerField(blank=True, null=True)
-#     price = models.FloatField(blank=True, null=True)
-#     other_info = models.CharField(max_length=45, blank=True, null=True)
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'places'
-
-
-
->>>>>>> Stashed changes
 class Reviews(models.Model):
     place_id = models.AutoField(primary_key=True)
     text = models.CharField(max_length=100, blank=True, null=True)

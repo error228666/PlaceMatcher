@@ -1,64 +1,85 @@
 {% extends 'mainpage/base.html' %}
 
 {% block content%}
-    <h3>Search!</h3>
-    <form method="GET" action=".">
+<div class="row justify-content-center">
+<div class="col-lg-10">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body">
+    <h3>Поиск</h3>
+    <form method="GET" action="." align="center" >
+        <div class="msearch">
         <div class="form-row">
-            <div class="form-group col-12">
+            <div class="form-group col-10">
                 <div class="input-group">
                     <input class="form-control py-2 border-right-0 border" type="search" name="name_contains" placeholder="Название" />
                 </div>
             </div>
         </div>
-
-        <div class="form-row">
-          <div class="col-auto">
-            <label for="MinRating">Минимальный рейтинг</label>
+        </div>
+        <div class="msearch">
+            <div class="boxes" align="justify">
+                <div class="form-row">
+          <div class="col-lg-7">
+              <label for="MinRating">Мин. рейтинг</label>
             <input type="number" min=0 class="form-control" id="MinRating" placeholder="0" name="min_rating">
           </div>
-          <div class="col-auto">
-              <label for="PersonCount">Количество человек</label>
+                </div>
+                    <div class="form-row" >
+          <div class="col-lg-7">
+              <label for="PersonCount">Кол-во человек</label>
             <input type="number" min=0 class="form-control" id="PersonCount" placeholder="0" name="person_count">
           </div>
-
-
-        </div>
-        <div class="form-row">
-              <label for="category">Категория</label>
+                    </div>
+                <div class="form-row">
+            <div class="col-lg-7">
+                <label for="category">Категория</label>
             <select id="category" class="form-control" name="category">
-              <option selected>Choose...</option>
+              <option selected>Выбрать...</option>
               {% for cat in categories %}
               <option value="{{ cat }}">{{ cat }}</option>
               {% endfor %}
             </select>
-        </div>
+            </div>
+            </div>
         <div class="form-row">
-              <label for="category">Ближайшее метро</label>
+            <div class="col-lg-7">
+                <label for="metro">Ближайшее метро</label>
             <select id="metro" class="form-control" name="metro">
-              <option selected>Choose...</option>
+              <option selected>Выбрать...</option>
               {% for m in metro %}
               <option value="{{ m }}">{{ m }}</option>
               {% endfor %}
             </select>
           </div>
-
-        <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+                <button type="submit" class="btn btn-primary">Искать</button>
+            </div>
+        </div>
     </form>
+        </div>
+    </div>
+    </div>
+    </div>
+<div class="row justify-content-center">
+<div class="col-lg-10">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body">
 
     <hr />
 
-
-        <div class="row">
+        <div class="row" align="center">
             <ul>
                 {% for place in queryset %}
-                <li>
+                <div>
                      <a href="{% url 'place' place.id %}" >{{place.name}}</a>
+                    <br>
 
                     <span>
                 {% for cat in place.category.all %}
                         {{cat}},
                         {% endfor %}
                     </span>
+                    <br>
                     <span>{% for m in place.metro.all %}
                         метро {{m}}
                         {% endfor %} </span>
@@ -71,9 +92,13 @@
                          */
 
                     </script>
-                </li>
+                </div>
                 <hr/>
                 {% endfor %}
             </ul>
         </div>
+            </div>
+    </div>
+    </div>
+    </div>
 {% endblock %}
