@@ -29,7 +29,7 @@ class Places(models.Model):
     min_count_of_people = models.IntegerField(blank=True, null=True)
     max_count_of_people = models.IntegerField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
-    favourites = models.ManyToManyField(Profile)
+    favourites = models.ManyToManyField("mainpage.Profile")
 
     def __str__(self):
         return self.name
@@ -40,7 +40,7 @@ class Review(models.Model):
     min = models.IntegerField(blank=True, null=True)
     max = models.IntegerField(blank=True, null=True)
     text = models.TextField()
-    user = models.ManyToManyField(Profile)
+    user = models.ManyToManyField("mainpage.Profile")
     rating = models.FloatField(null=True)
     date = models.DateField(blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)

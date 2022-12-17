@@ -4,6 +4,7 @@ from mainpage.models import Profile
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+
 def is_valid_queryparam(param):
     return param != '' and param is not None
 
@@ -157,7 +158,7 @@ def ThanksView(request, placeid):
     max_person_count = request.POST.get('max')
     print(max_person_count)
     print(min_person_count)
-    if min_person_count > max_person_count:
+    if is_valid_queryparam(min_person_count) and is_valid_queryparam(max_person_count) is not None and min_person_count > max_person_count:
         context = {'text': "Максимальное количество не может быть меньше минимального", 'button': 1, 'place': place}
         return render(request, "mainpage/thanks.html", context)
     rating = request.POST.get('rating')
