@@ -1,5 +1,4 @@
 from django.db import models
-from mainpage.models import Profile
 
 
 class Category(models.Model):
@@ -10,7 +9,7 @@ class Category(models.Model):
 
 
 class Metro(models.Model):
-    name = models.CharField(max_length=30,blank=True, null=True)
+    name = models.CharField(max_length=30, blank=True, null=True)
     line = models.IntegerField(blank=True, null=True)
     width = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
@@ -34,6 +33,7 @@ class Places(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Review(models.Model):
     place = models.ManyToManyField(Places)

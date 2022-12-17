@@ -12,7 +12,7 @@
 ## Installation
 
 ```sh
-1) Clone this repository. Make sure you installed everything from requirements.txt
+1) Clone this repository. Make sure you installed everything from requirements.txt via "pip install -r requirements.txt" command
 2) Run "python  manage.py import_data Places" command to import database.
 3) Start local server with "python manage.py runserver" command.
 4) Open the suggested link in your browser. Usually it is http://127.0.0.1:8000/

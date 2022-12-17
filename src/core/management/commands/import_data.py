@@ -8,7 +8,6 @@ import geopy.distance
 from time import sleep
 
 
-
 def add_place(row):
     place = Places(name=row[0], adress=row[3], site=row[20], vk=row[24])
     place.save()

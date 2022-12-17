@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from PIL import Image
-
+import core.models
 
 
 class Profile(models.Model):
@@ -36,7 +36,7 @@ class FriendRequest(models.Model):
 class Meeting(models.Model):
     from_user_m = models.ForeignKey(Profile, related_name="from_user_m", on_delete=models.CASCADE)
     to_user_m = models.ForeignKey(Profile, related_name="to_user_m", on_delete=models.CASCADE)
-    place_m = models.ForeignKey(Places, related_name="place_m", on_delete=models.CASCADE)
+    place_m = models.ForeignKey(core.models.Places, related_name="place_m", on_delete=models.CASCADE)
     date_m = models.DateField(default='')
     time_m = models.TimeField(default='', max_length=10)
 
@@ -47,7 +47,7 @@ class Meeting(models.Model):
 class MeetingRequest(models.Model):
     from_user_mr = models.ForeignKey(Profile, related_name="from_user_mr", on_delete=models.CASCADE)
     to_user_mr = models.ForeignKey(Profile, related_name="to_user_mr", on_delete=models.CASCADE)
-    place = models.ForeignKey(Places, related_name="places", on_delete=models.CASCADE)
+    place = models.ForeignKey(core.models.Places, related_name="places", on_delete=models.CASCADE)
     date = models.DateField(default='')
     time = models.TimeField(default='', max_length=10)
 
@@ -186,12 +186,6 @@ class Meetings(models.Model):
     class Meta:
         managed = False
         db_table = 'meetings'
-
-
-
-    class Meta:
-        managed = False
-        db_table = 'reviews'
 
 
 class Users(models.Model):

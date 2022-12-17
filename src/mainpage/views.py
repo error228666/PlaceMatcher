@@ -1,12 +1,11 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import FormView
-
+from datetime import datetime
 from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm, MeetingRequestForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-
 from .models import Profile, FriendRequest, MeetingRequest, Meeting
 from core.models import Places
 
@@ -14,7 +13,7 @@ from core.models import Places
 def mainpage(request):
     return render(request, "mainpage/mainpage.html")
 
-
+@login_required
 def friends(request):
     user = Profile.objects.get(id=request.user.id)
     all_users = Profile.objects.exclude(id=request.user.id)
@@ -37,15 +36,18 @@ def favorites(request):
 
     return render(request, "mainpage/favorites.html", {'favs': favs})
 
-
+@login_required
 def meetings(request):
     sent_requests = MeetingRequest.objects.filter(from_user_mr=Profile.objects.get(user=request.user))
     new_requests = MeetingRequest.objects.filter(to_user_mr=Profile.objects.get(user=request.user))
     return render(request, "mainpage/meetings.html", {'sent_requests': sent_requests, 'new_requests': new_requests})
 
+
 def planned_meetings(request):
-    meetings = Meeting.objects.all().filter(from_user_m=Profile.objects.get(user=request.user))
+    Meeting.objects.filter(date_m__lt=datetime.today().date()).delete()
+    meetings = Meeting.objects.filter(from_user_m=Profile.objects.get(user=request.user))
     return render(request, "mainpage/planned_meetings.html", {'meetings': meetings})
+
 
 @login_required
 def profile(request):
@@ -109,6 +111,7 @@ class schedule_meeting(FormView):
         form = self.form_class(request.POST, uid=request.user.id)
 
         if form.is_valid():
+            form.clean()
             obj = form.save(commit=False)
             obj.from_user_mr = Profile.objects.get(id=request.user.id)
             obj.save()
@@ -131,6 +134,7 @@ def accept_meeting_request(request, id):
 def reject_meeting_request(request, id):
     MeetingRequest.objects.filter(id=id).delete()
     return redirect('/meetings/')
+
 
 def cancel_meeting(request,id):
     Meeting.objects.filter(id=id).delete()
@@ -166,6 +170,7 @@ class SignUp(View):
             return redirect(to='search')
 
         return render(request, self.template_name, {'form': form})
+
 
 class CustomLoginView(LoginView):
     form_class = LoginForm
