@@ -24,6 +24,9 @@ class Profile(models.Model):
             img.thumbnail(new_img)
             img.save(self.avatar.path)
 
+from core.models import Places, Category
+
+
 
 class FriendRequest(models.Model):
     from_user = models.ForeignKey(Profile, related_name="from_user", on_delete=models.CASCADE)
@@ -183,18 +186,6 @@ class Meetings(models.Model):
     class Meta:
         managed = False
         db_table = 'meetings'
-
-
-class Reviews(models.Model):
-    place_id = models.AutoField(primary_key=True)
-    text = models.CharField(max_length=100, blank=True, null=True)
-    rating = models.FloatField(blank=True, null=True)
-    user = models.IntegerField(blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'reviews'
 
 
 class Users(models.Model):

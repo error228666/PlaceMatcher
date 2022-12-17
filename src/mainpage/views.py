@@ -7,6 +7,7 @@ from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm, M
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from .models import Profile, FriendRequest, MeetingRequest, Meeting
+from core.models import Places
 
 
 def mainpage(request):
@@ -28,7 +29,12 @@ def friends(request):
 
 @login_required
 def favorites(request):
-    return render(request, "mainpage/favorites.html")
+    profile = Profile.objects.get(id=request.user.id)
+    favs = Places.objects.all().filter(favourites=profile)
+    print(len(favs))
+
+
+    return render(request, "mainpage/favorites.html", {'favs': favs})
 
 @login_required
 def meetings(request):

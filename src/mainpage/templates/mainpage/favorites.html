@@ -1,5 +1,64 @@
 {% extends 'mainpage/base.html' %}
 
 {% block content%}
-    <h3>Fav!</h3>
+<div class="row justify-content-center">
+<div class="col-lg-6">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body" align="center">
+    <h3>Избранные места</h3>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="row justify-content-center">
+<div class="col-lg-6">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body" align="center">
+    {% if favs%}
+    <div class="row" align="center">
+        <ul>
+            {% for place in favs %}
+                <div>
+                    <a href="{% url 'place' place.id %}" >{{place.name}}</a>
+
+                    <span>
+                        {% for cat in place.category.all %}
+                                {{cat}},
+                        {% endfor %}
+                    </span>
+                    <br>
+                    <span>
+                        {% for m in place.metro.all %}
+                            метро {{m}}
+                        {% endfor %}
+                    </span>
+
+                    {% if place.average_rating != None %}
+                    <br>
+                    <span>Рейтинг: {{place.average_rating}} </span>
+                    {% endif %}
+                    {% if place.min_count_of_people != None and place.max_count_of_people != None%}
+                    <br>
+                    <span>Количество человек: {{place.min_count_of_people}}-{{place.max_count_of_people}}</span>
+                    {% endif %}
+                    {% if place.price != None%}
+                    <br>
+                    <span>Средняя цена: {{place.price}}р </span>
+                    {% endif %}
+                </div>
+                <hr/>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <h3>Избранных мест пока нет</h3>
+        {% endif %}
+
+
+</div>
+</div>
+</div>
+</div>
+
 {% endblock %}
