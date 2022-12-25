@@ -1,18 +1,19 @@
 from django.contrib import messages
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views import View
-from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm
+from django.views.generic import FormView
+from datetime import datetime
+from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm, MeetingRequestForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-
-from .models import Profile, FriendRequest
+from .models import Profile, FriendRequest, MeetingRequest, Meeting
+from core.models import Places
 
 
 def mainpage(request):
     return render(request, "mainpage/mainpage.html")
 
-
+@login_required
 def friends(request):
     user = Profile.objects.get(id=request.user.id)
     all_users = Profile.objects.exclude(id=request.user.id)
@@ -26,13 +27,26 @@ def friends(request):
     return render(request, "mainpage/friends.html", {'all_users': all_users, 'fr': fr, 'user_friends': user_friends})
 
 
-
+@login_required
 def favorites(request):
-    return render(request, "mainpage/favorites.html")
+    profile = Profile.objects.get(id=request.user.id)
+    favs = Places.objects.all().filter(favourites=profile)
+    print(len(favs))
 
 
+    return render(request, "mainpage/favorites.html", {'favs': favs})
+
+@login_required
 def meetings(request):
-    return render(request, "mainpage/meetings.html")
+    sent_requests = MeetingRequest.objects.filter(from_user_mr=Profile.objects.get(user=request.user))
+    new_requests = MeetingRequest.objects.filter(to_user_mr=Profile.objects.get(user=request.user))
+    return render(request, "mainpage/meetings.html", {'sent_requests': sent_requests, 'new_requests': new_requests})
+
+
+def planned_meetings(request):
+    Meeting.objects.filter(date_m__lt=datetime.today().date()).delete()
+    meetings = Meeting.objects.filter(from_user_m=Profile.objects.get(user=request.user))
+    return render(request, "mainpage/planned_meetings.html", {'meetings': meetings})
 
 
 @login_required
@@ -80,11 +94,51 @@ def delete_friend(request, id):
     friend = Profile.objects.get(id=id)
     user.friends.remove(friend)
     friend.friends.remove(user)
-    print('\n\n\n\n')
-    print(user.friends.all())
-    print(friend.friends.all())
-    print('\n\n\n\n')
     return redirect('/friends/')
+
+
+class schedule_meeting(FormView):
+    form_class = MeetingRequestForm
+    initial = {'key': 'value'}
+    template_name = 'mainpage/schedule_meeting.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(uid=request.user.id, initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        print("uid = " + str(request.user.id))
+        form = self.form_class(request.POST, uid=request.user.id)
+
+        if form.is_valid():
+            form.clean()
+            obj = form.save(commit=False)
+            obj.from_user_mr = Profile.objects.get(id=request.user.id)
+            obj.save()
+
+            return redirect(to='meetings')
+
+        return render(request, self.template_name, {'form': form})
+
+
+def accept_meeting_request(request, id):
+    mrequest = MeetingRequest.objects.get(id=id)
+    meeting_instance = Meeting.objects.get_or_create(from_user_m=mrequest.from_user_mr, to_user_m=mrequest.to_user_mr,
+                                                     date_m=mrequest.date, time_m=mrequest.time, place_m=mrequest.place)
+    meeting_instance = Meeting.objects.get_or_create(from_user_m=mrequest.to_user_mr, to_user_m=mrequest.from_user_mr,
+                                                     date_m=mrequest.date, time_m=mrequest.time, place_m=mrequest.place)
+    MeetingRequest.objects.filter(id=id).delete()
+    return redirect('/meetings/')
+
+
+def reject_meeting_request(request, id):
+    MeetingRequest.objects.filter(id=id).delete()
+    return redirect('/meetings/')
+
+
+def cancel_meeting(request,id):
+    Meeting.objects.filter(id=id).delete()
+    return redirect('/meetings/')
 
 
 class SignUp(View):
@@ -117,6 +171,7 @@ class SignUp(View):
 
         return render(request, self.template_name, {'form': form})
 
+
 class CustomLoginView(LoginView):
     form_class = LoginForm
 
@@ -131,3 +186,4 @@ class CustomLoginView(LoginView):
 
         # else browser session will be as long as the session cookie time "SESSION_COOKIE_AGE" defined in settings.py
         return super(CustomLoginView, self).form_valid(form)
+

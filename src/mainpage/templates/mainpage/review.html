@@ -1,0 +1,53 @@
+{% extends 'mainpage/base.html' %}
+
+{% block content%}
+
+
+<div class="row justify-content-center">
+<div class="col-lg-6">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body" align="center">
+{% if abil != 0%}
+<h3>Отзыв на {{place.name}}</h3>
+    <form method="POST" action="{% url 'thanks' place.id %}">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col">
+                <label for="Min">Минимальное количество человек</label>
+                <input type="number" min=0 class="form-control" id="Min" placeholder="0" name="min">
+            </div>
+            <div class="col" >
+                <label for="Max">Максимальное количество человек</label>
+                <input type="number" min=0 class="form-control" id="Max" placeholder="0" name="max">
+            </div>
+            <div class="col" >
+                <label for="Rating" class="mb-4">Ваша оценка</label>
+                <input type="number" min=0 max=5 step=0.5 class="form-control" id="Rating" placeholder="0" name="rating">
+            </div>
+            <div class="col" >
+                <label for="Price" >Сколько вы потратили</label>
+                <input type="number" min=0 class="form-control" id="Price" placeholder="0" name="price">
+            </div>
+        </div>
+        <hr/>
+
+        <div class="form-row">
+             <textarea class="form-control mb-3" name="message" rows="5"></textarea>
+        </div>
+
+        <a href="{% url 'place' place.id %}" class="btn btn-dark btn-lg">Назад</a>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+{% else %}
+    <h3> Вы уже оставляли отзыв! </h3>
+    <a href="{% url 'place' place.id %}" class="btn btn-dark btn-lg">Назад</a>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock %}
