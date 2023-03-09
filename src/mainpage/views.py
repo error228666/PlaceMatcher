@@ -31,7 +31,6 @@ def friends(request):
 def favorites(request):
     profile = Profile.objects.get(id=request.user.id)
     favs = Places.objects.all().filter(favourites=profile)
-    print(len(favs))
 
 
     return render(request, "mainpage/favorites.html", {'favs': favs})
@@ -136,7 +135,7 @@ def reject_meeting_request(request, id):
     return redirect('/meetings/')
 
 
-def cancel_meeting(request,id):
+def cancel_meeting(request, id):
     Meeting.objects.filter(id=id).delete()
     return redirect('/meetings/')
 
