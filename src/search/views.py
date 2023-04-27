@@ -50,7 +50,6 @@ def SearchView(request):
 
 
 def PlaceView(request, placeid):
-
     place = Places.objects.get(id=placeid)
     review = Review.objects.all()
     review = review.filter(place=place)
@@ -156,8 +155,6 @@ def ThanksView(request, placeid):
     message = request.POST.get('message')
     min_person_count = request.POST.get('min')
     max_person_count = request.POST.get('max')
-    print(max_person_count)
-    print(min_person_count)
     if is_valid_queryparam(min_person_count) and is_valid_queryparam(max_person_count) is not None and min_person_count > max_person_count:
         context = {'text': "Максимальное количество не может быть меньше минимального", 'button': 1, 'place': place}
         return render(request, "mainpage/thanks.html", context)
@@ -166,16 +163,13 @@ def ThanksView(request, placeid):
         context = {'text': "Введите вашу оценку", 'button': 1,'place': place}
         return render(request, "mainpage/thanks.html", context)
     price = request.POST.get('price')
-    review = Review(text=message, rating=rating)
+    review = Review(text=message, rating=rating, place=place, user=user)
     if is_valid_queryparam(min_person_count):
         review.min = min_person_count
     if is_valid_queryparam(max_person_count):
         review.max = max_person_count
     if is_valid_queryparam(price):
         review.price = price
-    review.save()
-    review.place.add(place)
-    review.user.add(user)
     review.save()
 
     UpdatePlace(place, min_person_count, max_person_count, rating, price)

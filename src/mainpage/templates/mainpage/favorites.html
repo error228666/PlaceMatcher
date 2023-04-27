@@ -55,6 +55,17 @@
         <h3>Избранных мест пока нет</h3>
         {% endif %}
 
+          <h1>Рекомендации</h1>
+  {% if recommended_places %}
+    <ul>
+      {% for place in recommended_places %}
+        <li>{{ place.name }} - Средняя оценка: {{ place.average_rating }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>У вас еще нет рекомендаций.</p>
+  {% endif %}
+
 
 </div>
 </div>

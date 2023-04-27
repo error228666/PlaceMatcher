@@ -36,11 +36,11 @@ class Places(models.Model):
 
 
 class Review(models.Model):
-    place = models.ManyToManyField(Places)
+    place = models.ForeignKey(Places, on_delete=models.CASCADE, null=True)
     min = models.IntegerField(blank=True, null=True)
     max = models.IntegerField(blank=True, null=True)
-    text = models.TextField()
-    user = models.ManyToManyField("mainpage.Profile")
+    text = models.TextField(null=True)
+    user = models.ForeignKey("mainpage.Profile", on_delete=models.CASCADE, null=True)
     rating = models.FloatField(null=True)
     date = models.DateField(blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
