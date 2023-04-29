@@ -3,11 +3,13 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import FormView
 from datetime import datetime
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from .forms import RegisterForm, LoginForm, UpdateUserForm, UpdateProfileForm, MeetingRequestForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from .models import Profile, FriendRequest, MeetingRequest, Meeting
-from core.models import Places
+from core.models import Places, Review
 
 
 def mainpage(request):
@@ -27,13 +29,48 @@ def friends(request):
     return render(request, "mainpage/friends.html", {'all_users': all_users, 'fr': fr, 'user_friends': user_friends})
 
 
+def recommend_places(request):
+    profile = Profile.objects.get(id=request.user.id)
+    all_reviews = Review.objects.all()
+    user_reviews = all_reviews.filter(user=profile)
+    print([(r.place, r.text)  for r in user_reviews])
+    # place = Places.objects.get(id=placeid)
+    # review = review.filter(place=place)
+    # Collect all the reviews for each place
+    place_reviews = {}
+    for review in all_reviews:
+        if review.place not in place_reviews:
+            place_reviews[review.place] = []
+        place_reviews[review.place].append(review.text)
+    # Vectorize the review texts
+    corpus = [review.text for review in user_reviews]
+    if not corpus:
+        return None
+    vectorizer = CountVectorizer().fit(corpus)
+    user_vector = vectorizer.transform(corpus).toarray()
+
+    # Calculate cosine similarity between user's reviews and each place's reviews
+    similarities = {}
+    for place_name, reviews in place_reviews.items():
+        corpus = [review for review in reviews]
+        vector = vectorizer.transform(corpus).toarray()
+        similarity = cosine_similarity(user_vector, vector)[0][0]
+        similarities[place_name] = similarity
+
+    # Sort places by their similarity scores and return the top recommendations
+    sorted_places = sorted(similarities.items(), key=lambda x: x[1], reverse=True)
+    print(sorted_places)
+    recommended_places = [Places.objects.get(name=place_name) for place_name, _ in sorted_places]
+    return recommended_places[:5]
+
+
 @login_required
 def favorites(request):
     profile = Profile.objects.get(id=request.user.id)
     favs = Places.objects.all().filter(favourites=profile)
-
-
-    return render(request, "mainpage/favorites.html", {'favs': favs})
+    recommended_places = recommend_places(profile)
+    #print('recommended_places: ', recommended_places)
+    return render(request, "mainpage/favorites.html", {'favs': favs, 'recommended_places': recommended_places})
 
 @login_required
 def meetings(request):
@@ -66,7 +103,7 @@ def profile(request):
     return render(request, 'mainpage/profile.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
-def send_request(request,id):
+def send_request(request, id):
     from_user = Profile.objects.get(id=request.user.id)
     to_user = Profile.objects.get(id=id)
     frequest = FriendRequest.objects.get_or_create(from_user=from_user, to_user=to_user)
