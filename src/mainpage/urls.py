@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 from .forms import LoginForm
 from .views import CustomLoginView, send_request, accept_request, delete_friend, reject_request, schedule_meeting, \
-    planned_meetings, accept_meeting_request, reject_meeting_request, cancel_meeting
+    planned_meetings, accept_meeting_request, reject_meeting_request, cancel_meeting, PersonView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,6 +26,7 @@ urlpatterns = [
     path('accept-meeting-request/<int:id>/', accept_meeting_request, name='accept-meeting-request'),
     path('reject-meeting-request/<int:id>/', reject_meeting_request, name='reject-meeting-request'),
     path('cancel-meeting/<int:id>/', cancel_meeting, name='cancel-meeting'),
+    path('profile/<int:personid>', PersonView, name="person"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

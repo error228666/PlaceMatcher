@@ -1,0 +1,77 @@
+{% extends 'mainpage/base.html' %}
+
+{% block content%}
+<div class="row justify-content-center">
+<div class="col-lg-6">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body" align="center">
+
+    <div class="form-content">
+        <form>
+            <img src="{{avatar.url}}">
+
+            <div class="form-row col-md-8">
+                <div class="form-group">
+                    <label class="small mb-1">Имя пользователя:</label>
+                        {{ user.username }}
+                    <br>
+                    <label class="small mb-1">Имя:</label>
+                        {{ user.first_name }}
+                    <br>
+                    <label class="small mb-1">Фамилия:</label>
+                        {{ user.last_name }}
+                    <br>
+                    <label class="small mb-1">О себе:</label>
+                    {% if bio != '' %}
+                        <p>{{bio}}</p>
+                    {% else %}
+                        <p> Нет информации о пользователе. </p>
+                    {% endif %}
+                    {% if buttons == "toUs" %}
+                        {% for person in req %}
+                            <a href="{% url 'accept' person.id %}" class="btn btn-outline-primary me-2">Принять заявку</a>
+                            <a href="{% url 'reject' person.id %}" class="btn btn-outline-primary me-2">Отклонить заявку</a>
+                        {% endfor %}
+                    {% elif buttons == "fromUs" %}
+                        <p class="text-primary">Заявка отправлена</p>
+                    {% elif buttons == "fr" %}
+                        {% for person in req %}
+                            <a href="{% url 'delete-friend' person.id %}" class="btn btn-outline-primary me-2">Удалить из друзей</a>
+                        {% endfor %}
+                    {% else %}
+                            <a href="{% url 'add-friend' user.id %}" class="btn btn-outline-primary me-2">Добавить в друзья</a>
+                    {% endif %}
+                </div>
+            </div>
+            <br><br>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<h1>
+        {% if friends %}
+        <h2>Друзья</h2>
+        <div class="boxes">
+        {% for friend in friends %}
+            <div class="small-box">
+            <a href="{% url 'person' friend.id %}">
+                <img src="{{friend.avatar.url}}" width="40px">
+                <a>
+                    <h5> {{friend}} </h5>
+                    <h6>О себе: </h6>
+                    {% if friend.bio != '' %}
+                        <p>{{friend.bio}}</p>
+                    {% else %}
+                        <p> Нет информации о пользователе. </p>
+                    {% endif %}
+                </a>
+            </a>
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+</h1>
+
+{% endblock %}

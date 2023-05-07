@@ -27,7 +27,6 @@ class Profile(models.Model):
 from core.models import Places, Category
 
 
-
 class FriendRequest(models.Model):
     from_user = models.ForeignKey(Profile, related_name="from_user", on_delete=models.CASCADE)
     to_user = models.ForeignKey(Profile, related_name="to_user", on_delete=models.CASCADE)

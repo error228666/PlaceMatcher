@@ -13,18 +13,23 @@ from core.models import Places
 def mainpage(request):
     return render(request, "mainpage/mainpage.html")
 
+
 @login_required
 def friends(request):
     user = Profile.objects.get(id=request.user.id)
     all_users = Profile.objects.exclude(id=request.user.id)
     fr = FriendRequest.objects.filter(to_user=user)
+    reqs = FriendRequest.objects.filter(from_user=user)
     user_friends = user.friends.all()
     for u in all_users:
         if u in user_friends:
             all_users = all_users.exclude(id=u.id)
+        if FriendRequest.objects.filter(from_user=u, to_user=user):
+            all_users = all_users.exclude(id=u.id)
         if FriendRequest.objects.filter(from_user=user, to_user=u):
             all_users = all_users.exclude(id=u.id)
-    return render(request, "mainpage/friends.html", {'all_users': all_users, 'fr': fr, 'user_friends': user_friends})
+    context = {'all_users': all_users, 'fr': fr, 'user_friends': user_friends, 'reqs' : reqs}
+    return render(request, "mainpage/friends.html", context)
 
 
 @login_required
@@ -187,3 +192,29 @@ class CustomLoginView(LoginView):
         # else browser session will be as long as the session cookie time "SESSION_COOKIE_AGE" defined in settings.py
         return super(CustomLoginView, self).form_valid(form)
 
+
+def PersonView(request, personid):
+    person = Profile.objects.get(id=personid)
+    user = Profile.objects.get(id=request.user.id)
+    toUs = FriendRequest.objects.filter(from_user=person, to_user=user)
+    fromUs = FriendRequest.objects.filter(from_user=user, to_user=person)
+    if toUs and not fromUs:
+        forButton = "toUs"
+        req = toUs
+    elif not toUs and fromUs:
+        forButton = "fromUs"
+        req = fromUs
+    elif req := user.friends.filter(id=person.user.id):
+        forButton = "fr"
+    else:
+        forButton = None
+        req = None
+    context = {
+        'user': person.user,
+        'bio': person.bio,
+        'friends': person.friends.all(),
+        'avatar': person.avatar,
+        'buttons': forButton,
+        'req': req
+    }
+    return render(request, "mainpage/user_profile.html", context)
