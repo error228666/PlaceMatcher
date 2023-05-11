@@ -69,8 +69,11 @@ def PlaceView(request, placeid):
     }
     return render(request, "mainpage/place.html", context)
 
+
 def Vk(request, placeid):
     return redirect(f"{Places.objects.get(id=placeid).vk}")
+
+
 def Website(request, placeid):
     return redirect(f"{Places.objects.get(id=placeid).site}")
 
