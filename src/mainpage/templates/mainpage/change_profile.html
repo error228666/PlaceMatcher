@@ -1,0 +1,68 @@
+{% extends 'mainpage/base.html' %}
+
+{% block content%}
+
+<div class="row justify-content-center">
+<div class="col-lg-5">
+<div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
+<div class="card-body" align="center">
+    {% if user_form.errors %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <div id="form_errors">
+                {% for key, value in user_form.errors.items %}
+                    <strong>{{ value }}</strong>
+                {% endfor %}
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+    <div class="form-content">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="block-page-body">
+                <div class="head-left" style="font-size: 24px;" align="left">
+                    {{ user_form.username }}
+                </div>
+                <div align="left">
+                    <figure class="row my-3 p-3" >
+                        <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }}" width="50%" style="cursor: pointer;"/>
+                        <label class="small mb-1" align="left">Поменять фото профиля:</label>
+                        {{ profile_form.avatar }}
+                    </figure>
+                    <div>
+                        <div>
+                            <label class="small mb-1">Имя:</label>
+                            {{ user_form.first_name }}
+                        </div>
+                        <div>
+                            <label class="small mb-1">Фамилия:</label>
+                            {{ user_form.last_name }}
+                        </div>
+                        <div>
+                            <label class="small mb-1">Email:</label>
+                            {{ user_form.email }}
+                        </div>
+                        <div>
+                            <label class="small mb-1">О себе:</label> {% if user.profile.bio != '' %}
+                            <p>{{profile_form.bio}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <div>
+                <button type="submit" class="btn btn-dark btn-lg" style="font-size: 15px;">Сохранить</button>
+                <button type="reset" class="btn btn-dark btn-lg" style="font-size: 15px;">Отменить</button>
+            </div>
+            <br><br>
+            <a href="profile.html" class="btn btn-outline-primary me-2">Вернуться на страницу</a>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
+
