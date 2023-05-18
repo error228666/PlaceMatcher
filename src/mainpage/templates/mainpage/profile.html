@@ -1,13 +1,12 @@
+
 {% extends 'mainpage/base.html' %}
 
-{% block content %}
+{% block content%}
+
 <div class="row justify-content-center">
 <div class="col-lg-5">
 <div class="card shadow-lg border-0 rounded-lg bg-dark mt-0 mb-3">
 <div class="card-body" align="center">
-    <figure class="row my-3 p-3" align="center">
-        <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }}" width="50%" style="cursor: pointer;"/>
-    </figure>
     {% if user_form.errors %}
         <div class="alert alert-danger alert-dismissible" role="alert">
             <div id="form_errors">
@@ -21,34 +20,45 @@
         </div>
     {% endif %}
     <div class="form-content">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
             <div class="form-row">
-                <div class="col-md-5">
-                    <div class="form-group">
-                        <label class="small mb-1">Имя пользователя:</label>
-                            {{ user_form.username }}
-                        <label class="small mb-1">Email:</label>
-                            {{ user_form.email }}
-                        <label class="small mb-1">Имя:</label>
-                            {{ user_form.first_name }}
-                        <label class="small mb-1">Фамилия:</label>
-                            {{ user_form.last_name }}
-                    </div>
-                    <div class="form-group">
-                        <label class="small mb-1">Поменять фото профиля:</label>
-                        {{ profile_form.avatar }}
-                    </div>
-                    <label class="small mb-1">О себе:</label> {{ profile_form.bio }}
+                    <div class="block-page-body">
+                        <div class="head-left" style="font-size: 24px;" align="left">
+                            {{ user.username }}
+                        </div>
+                        <div align="left">
+                            <figure class="row my-3 p-3" >
+                            <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }}" width="50%" style="cursor: pointer;"/>
+                            </figure>
+                            <div>
+                                <div>
+                                    <label class="small mb-1">Имя:</label>
+                                    {{ user.first_name }}
+                                </div>
+                                <div>
+                                    <label class="small mb-1">Фамилия:</label>
+                                    {{ user.last_name }}
+                                </div>
+                                <div>
+                                    <label class="small mb-1">Email:</label>
+                                    {{ user.email }}
+                                </div>
+                                <div>
+                                    <label class="small mb-1">О себе:</label> {% if user.profile.bio != '' %}
+                                    <p>{{user.profile.bio}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        <p> Нет информации о пользователе. </p>
+                    {% endif %}
                 </div>
             </div>
             <br><br>
-            <button type="submit" class="btn btn-dark btn-lg">Сохранить изменения</button>
-            <button type="reset" class="btn btn-dark btn-lg">Отменить</button>
-        </form>
+            <a href="change_profile.html" class="btn btn-outline-primary me-2">Изменить профиль</a>
     </div>
 </div>
 </div>
 </div>
 </div>
-{% endblock content %}
+{% endblock %}
